@@ -10,9 +10,12 @@ ws_c.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log('received from client: %s', message);
     // Relay the message to server
-    if (ws_s.readyState === WebSocket.OPEN) {
-      ws_s.send(message);
-    }
+    ws_s.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+	console.log('sent to server');
+        client.send(message.toString());
+      }
+    });
   });
 
   ws.on('close', function close() {
@@ -33,7 +36,7 @@ ws_s.on('connection', function connection(ws) {
     // Relay the message to clients
     ws_c.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
+        client.send(message.toString());
       }
     });
   });
