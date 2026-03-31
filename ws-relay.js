@@ -9,11 +9,11 @@ ws_c.on('connection', function connection(ws) {
   // When a message is received from a client
   ws.on('message', function incoming(message) {
     console.log('received from client: %s', message);
-
-  // Relay the message to server
-  if (ws_s.readyState === WebSocket.OPEN) {
-    ws_s.send(message);
-  }
+    // Relay the message to server
+    if (ws_s.readyState === WebSocket.OPEN) {
+      ws_s.send(message);
+    }
+  });
 
   ws.on('close', function close() {
     console.log('Client disconnected');
@@ -30,7 +30,6 @@ ws_s.on('connection', function connection(ws) {
   // When a message is received from the server
   ws.on('message', function incoming(message) {
     console.log('received from server: %s', message);
-
     // Relay the message to clients
     ws_c.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
