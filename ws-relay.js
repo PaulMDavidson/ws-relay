@@ -3,9 +3,9 @@ const WebSocket = require('ws');
 const ws_c = new WebSocket.Server({ port: 8080 });  // Clients to connect to this port
 const ws_s = new WebSocket.Server({ port: 8081 });  // Server to connect here
 
-ws_c.on('connection', function connection(ws) {
-  console.log('Client connected');
+var c = 0;
 
+ws_c.on('connection', function connection(ws) {
   // When a message is received from a client
   ws.on('message', function incoming(message) {
     console.log('received from client: %s', message);
@@ -25,6 +25,11 @@ ws_c.on('connection', function connection(ws) {
   ws.on('error', function error(err) {
     console.error('WebSocket error:', err);
   });
+
+  console.log('Client '+c+' connected');
+  ws.send('-1 hello '+c);
+  ++c;
+
 });
 
 ws_s.on('connection', function connection(ws) {
